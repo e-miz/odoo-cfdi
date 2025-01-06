@@ -5,7 +5,7 @@ import glob
 import awkward as ak
 
 # %%
-xml_file_paths = glob.glob("xml-bills/*.xml")
+xml_file_paths = glob.glob("xml-bills/**/*.xml")
 # %%
 cfdi_list = []
 for fp in xml_file_paths:
@@ -13,4 +13,11 @@ for fp in xml_file_paths:
     cfdi_list.append(ak.from_json(render.json_str(invoice)))
 # %%
 cfdis = ak.Array(cfdi_list)
-cfdis.Emisor.Nombre
+# %%
+set(cfdis.Receptor.Nombre)
+# %%
+set(cfdis.Receptor.DomicilioFiscalReceptor)
+# %%
+set(cfdis.Receptor.RegimenFiscalReceptor)
+# %%
+set(cfdis.Receptor.UsoCFDI)
