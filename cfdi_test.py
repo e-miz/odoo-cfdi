@@ -3,6 +3,7 @@ from satcfdi.cfdi import CFDI
 from satcfdi import render
 import glob
 import awkward as ak
+import pandas as pd
 
 # %%
 xml_file_paths = glob.glob("xml-bills/**/*.xml")
@@ -14,10 +15,10 @@ for fp in xml_file_paths:
 # %%
 cfdis = ak.Array(cfdi_list)
 # %%
-set(cfdis.Receptor.Nombre)
-# %%
-set(cfdis.Receptor.DomicilioFiscalReceptor)
-# %%
-set(cfdis.Receptor.RegimenFiscalReceptor)
-# %%
-set(cfdis.Receptor.UsoCFDI)
+receptor_df = ak.to_dataframe(cfdis["Receptor"])
+receptor_df.replace(to_replace="nan", value=pd.NA).dropna().drop_duplicates(
+    subset=[
+        "Rfc",
+        "Nombre",
+    ]
+).to_excel("cfdi_receptors.xlsx")
